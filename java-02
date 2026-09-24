@@ -1,0 +1,45 @@
+# RideShare — Java 2
+
+**Shkurtesat:** MVP (Minimum Viable Product – produkti minimal i përdorshëm); AI (Artificial Intelligence – inteligjencë artificiale).
+
+## 1. Problemi
+[Studentet qe udhetojne per tek Kolegji AAB kane veshtiresi punen e udhetimit,por jane autobuset e kolegjit qe udhetojne qdo 15 minuta nga Prishtina.Studentet qe vine nga vende te tjera e me te largeta nga Kolegji AAB mund te mos kene orar te pershtatshem te autobusave dhe mund te vonohen ne ligjerata ose ne ushtrime.Ne anen tjeter, kolege me veture udhetojne ne te njejten ore me vende bosh,por nuk kane nje menyre te thjeshte per te ditur kush po udheton ne te njejtin drejtim.
+] Çfarë vështirësie kanë studentët që udhëtojnë për në AAB?
+
+## 2. Përdoruesit
+[PLOTËSO] Qfare dëshiron shoferi? - Do te postoje shpejt nisjen,oren dhe vendet e lira dhe te vendose vete cilin person e merr ne veture duke pranuar ose refuzuar kerkesat.
+Çfarë dëshiron udhëtari? - Do te gjeje shpejt nje udhetim qe i pershtatet,te shohe detajet (shoferi, nisja, ora, vendet e lira) dhe te kerkoje nje vend pa humbur kohe ne grupe ku mund te jene me koleget e kolegjit.
+
+
+## 3. Tri ekranet
+1. Lista e udhetimeve: [Shfaq oren e udhetimit,drejtimin,oren e nisjes dhe numrin e vendeve te lira.Perdoruesi mund te zgjedhe nje udhetim duke klikuar “Shiko udhetimin”.]
+2. Detajet e udhëtimit: [Shfaq informatat me të plota për udhetimin,destinacioni, ora e nisjes dhe vendet e lira. Udhetari mund te kerkoje nje vend ne kete udhetim.]
+3. Kerkesa ne pritje: [Shfaq kerkesat per vende qe jane derguar nga udhetaret.Shoferi mund t’i shohe kerkesat dhe te zgjedhe nese do ta pranoje ose refuzoje kerkesen.]
+
+## 4. MVP — vetëm tri veçori
+[Shoferi te mund te publikoje nje udhetim me oren, drejtimin dhe numrin e vendeve te lira.
+Udhetari te mund te shohe detajet e udhetimit dhe te kerkoje nje vend.
+Shoferi te mund te pranoje ose refuzoje kërkesen per vend.] Cilat tri veprime duhet të funksionojnë në versionin e parë?
+
+
+## 5. Çfarë e lëmë për më vonë?
+[Chat-i direkt mes shoferit dhe udhetarit.
+Pagesat online për udhëtimin.
+
+Këto mund te shtohen ne nje version te ardhshem, pasi versioni i pare fokusohet vetem ne gjetjen e udhetimit dhe kërkesen per vend.] 
+
+## 6. Si e provoj?
+[Kur udhetari klikon per te kerkuar nje vend,kerkesa duhet te dergohet te shoferi dhe te shfaqet ne seksionin “Kerkesa ne pritje”. Shoferi me pas mund ta pranoje ose refuzoje kerkesen. Nese e pranon, vendi konsiderohet i rezervuar per udhetarin.]
+
+[Nese nuk ka vende të lira, udhetari nuk duhet te mund te dergoje kerkese per ate udhetim. Duhet te shfaqet nje mesazh si “Nuk ka vende te lira” dhe perdoruesi mund te kthehet te lista per te zgjedhur nje udhetim tjeter.] 
+
+## 7. Prova me kolegun
+[Kolegu u hutua ne fillim se ku duhej te klikonte per te pare me shume informacione rreth udhetimit. Per kete arsye, e bera butonin "Shiko udhetimin" me te qarte dhe vendosa informacionet kryesore, si drejtimi, ora dhe vendet e lira, direkt ne karten e udhetimit.] 
+
+## 8. Ndihma nga AI
+[Perdora AI vetem per te me ndihmuar ne percaktimin e veçorive te MVP-se dhe te rrjedhes se perdoruesit. Pjesen tjeter e bera vete dhe i kontrollova te gjitha sipas demonstrimit.]
+
+
+Shëno çfarë ndihme more dhe çfarë kontrollove vetë, ose shkruaj: Nuk përdora AI.
+
+Hiqi shenjat e plotësimit pasi t'i zëvendësosh me përgjigjet e tua.
