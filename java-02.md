@@ -7,7 +7,7 @@
 ] Çfarë vështirësie kanë studentët që udhëtojnë për në AAB?
 
 ## 2. Përdoruesit
-[PLOTËSO] Qfare dëshiron shoferi? - Do te postoje shpejt nisjen,oren dhe vendet e lira dhe te vendose vete cilin person e merr ne veture duke pranuar ose refuzuar kerkesat.
+Qfare dëshiron shoferi? - Do te postoje shpejt nisjen,oren dhe vendet e lira dhe te vendose vete cilin person e merr ne veture duke pranuar ose refuzuar kerkesat.
 Çfarë dëshiron udhëtari? - Do te gjeje shpejt nje udhetim qe i pershtatet,te shohe detajet (shoferi, nisja, ora, vendet e lira) dhe te kerkoje nje vend pa humbur kohe ne grupe ku mund te jene me koleget e kolegjit.
 
 
