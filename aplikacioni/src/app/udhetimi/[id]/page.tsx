@@ -2,14 +2,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
 import Vendtakimi from "@/components/Vendtakimi";
+import RuajTePreferuar from "@/components/RuajTePreferuar";
+import { eshteRuajtur } from "@/lib/tePreferuarat";
 
 export const dynamic = "force-dynamic";
 
 export default async function Detajet({
-  params,
-}: { params: Promise<{ id: string }> }) {
+  params, searchParams,
+}: { params: Promise<{ id: string }>; searchParams: Promise<{ gabim?: string }> }) {
   const { id } = await params;
+  const { gabim } = await searchParams;
   let udhetim;
+  let ruajtur = false;
   try {
     udhetim = await gjejUdhetimin(id);
   } catch {
@@ -22,6 +26,11 @@ export default async function Detajet({
     );
   }
   if (!udhetim) notFound();
+  try {
+    ruajtur = await eshteRuajtur(id);
+  } catch {
+    ruajtur = false; // tabela mungon ose databaza vonon: detajet hapen prape
+  }
 
   return (
     <main>
@@ -35,7 +44,8 @@ export default async function Detajet({
           Kërko vend
         </Link>
       ) : <button className="action" disabled>Nuk ka vende të lira</button>}
-        <Vendtakimi />
+      <RuajTePreferuar id={id} fillimisht={ruajtur} simuloGabim={gabim === "1"} />
+      <Vendtakimi />
     </main>
   );
 }
