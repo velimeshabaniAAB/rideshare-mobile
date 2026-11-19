@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
 import Vendtakimi from "@/components/Vendtakimi";
 import RuajTePreferuar from "@/components/RuajTePreferuar";
+import GjendjaLive from "@/components/GjendjaLive";
 import { eshteRuajtur } from "@/lib/tePreferuarat";
 
 export const dynamic = "force-dynamic";
@@ -38,12 +39,7 @@ export default async function Detajet({
       <h1>{udhetim.nisja} – {udhetim.destinacioni}</h1>
       <p>Ora: {udhetim.ora}</p>
       <p>Vendtakimi: {udhetim.vendtakimi}</p>
-      <p>Vende të lira: {udhetim.vende}</p>
-      {udhetim.vende > 0 ? (
-        <Link className="action" href={`/udhetimi/${id}/kerkesa`}>
-          Kërko vend
-        </Link>
-      ) : <button className="action" disabled>Nuk ka vende të lira</button>}
+      <GjendjaLive id={id} />
       <RuajTePreferuar id={id} fillimisht={ruajtur} simuloGabim={gabim === "1"} />
       <Vendtakimi />
     </main>
