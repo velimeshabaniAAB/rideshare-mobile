@@ -2,7 +2,7 @@ import "server-only";
 import { getSql } from "./db";
 import { profiliIm } from "./lejet";
 
-export type Kerkese = { id: number; emri: string; statusi: "ne_pritje" | "pranuar" };
+export type Kerkese = { id: number; emri: string; statusi: "ne_pritje" | "pranuar" | "refuzuar" };
 export type Gjendja = {
   vende: number;
   roli: "shofer" | "udhetar" | "mysafir";
@@ -47,7 +47,7 @@ export async function pranoKerkesen(kerkesaId: number) {
   const p = await profiliIm();
   if (!p) return "hyr";
   const sql = getSql();
-  // Nje komande e vetme: statusi dhe vendet ndryshojne bashke ose aspak.
+  // Nje komande e vetme: statusi, vendet dhe njoftimi ndryshojne bashke ose aspak.
   // Kerkesa pranohet vetem nese eshte "ne_pritje", shoferi eshte pronar dhe ka vende.
   const rows = await sql`
     WITH k AS (
@@ -60,9 +60,41 @@ export async function pranoKerkesen(kerkesaId: number) {
       UPDATE udhetimet SET vende = vende - 1
       WHERE id = (SELECT udhetim_id FROM k) AND vende > 0
       RETURNING id
+    ), a AS (
+      UPDATE kerkesat SET statusi = 'pranuar'
+      WHERE id = (SELECT id FROM k) AND EXISTS (SELECT 1 FROM v)
+      RETURNING id, udhetar_id, udhetim_id
     )
-    UPDATE kerkesat SET statusi = 'pranuar'
-    WHERE id = (SELECT id FROM k) AND EXISTS (SELECT 1 FROM v)
-    RETURNING id`;
+    INSERT INTO njoftimet (perdoruesi_id, kerkesa_id, teksti)
+    SELECT a.udhetar_id, a.id,
+      'Shoferi e pranoi kërkesën tënde për ' || u.nisja || ' – ' || u.destinacioni || '.'
+    FROM a JOIN udhetimet u ON u.id = a.udhetim_id
+    ON CONFLICT (kerkesa_id) DO NOTHING
+    RETURNING kerkesa_id`;
   return rows.length === 1 ? "pranuar" : "jo";
+}
+
+export async function refuzoKerkesen(kerkesaId: number) {
+  const p = await profiliIm();
+  if (!p) return "hyr";
+  const sql = getSql();
+  // Refuzimi nuk i ndryshon vendet. Statusi dhe njoftimi ruhen bashke.
+  const rows = await sql`
+    WITH k AS (
+      SELECT k.id FROM kerkesat k
+      JOIN udhetimet u ON u.id = k.udhetim_id
+      WHERE k.id = ${kerkesaId} AND k.statusi = 'ne_pritje' AND u.shofer_id = ${p.id}
+      FOR UPDATE
+    ), r AS (
+      UPDATE kerkesat SET statusi = 'refuzuar'
+      WHERE id = (SELECT id FROM k)
+      RETURNING id, udhetar_id, udhetim_id
+    )
+    INSERT INTO njoftimet (perdoruesi_id, kerkesa_id, teksti)
+    SELECT r.udhetar_id, r.id,
+      'Shoferi e refuzoi kërkesën tënde për ' || u.nisja || ' – ' || u.destinacioni || '.'
+    FROM r JOIN udhetimet u ON u.id = r.udhetim_id
+    ON CONFLICT (kerkesa_id) DO NOTHING
+    RETURNING kerkesa_id`;
+  return rows.length === 1 ? "refuzuar" : "jo";
 }

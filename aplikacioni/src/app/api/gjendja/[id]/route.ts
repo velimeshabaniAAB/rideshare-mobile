@@ -1,4 +1,4 @@
-import { dergoKerkese, lexoGjendjen, pranoKerkesen } from "@/lib/kerkesat";
+import { dergoKerkese, lexoGjendjen, pranoKerkesen, refuzoKerkesen } from "@/lib/kerkesat";
 
 export const dynamic = "force-dynamic";
 // Pergjigjja eshte personale: mos e ruaj per nje sesion tjeter.
@@ -19,8 +19,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   const { veprimi, kerkesaId } = await req.json();
   try {
-    const rezultati = veprimi === "prano"
-      ? await pranoKerkesen(Number(kerkesaId))
+    const rezultati = veprimi === "prano" ? await pranoKerkesen(Number(kerkesaId))
+      : veprimi === "refuzo" ? await refuzoKerkesen(Number(kerkesaId))
       : await dergoKerkese(id);
     return Response.json({ rezultati }, { headers: pa_cache });
   } catch {

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type Kerkese = { id: number; emri: string; statusi: "ne_pritje" | "pranuar" };
+type Kerkese = { id: number; emri: string; statusi: "ne_pritje" | "pranuar" | "refuzuar" };
 type Gjendja = { vende: number; roli: "shofer" | "udhetar" | "mysafir"; kerkesat: Kerkese[] };
 
 export default function GjendjaLive({ id }: { id: string }) {
@@ -39,9 +39,10 @@ export default function GjendjaLive({ id }: { id: string }) {
     };
   }, [lexo]);
 
-  async function dergo(veprimi: "kerko" | "prano", kerkesaId?: number) {
+  async function dergo(veprimi: "kerko" | "prano" | "refuzo", kerkesaId?: number) {
     setDergohet(true);
-    setMesazhi(veprimi === "prano" ? "Po ruhet pranimi…" : "Po dërgohet kërkesa…");
+    setMesazhi(veprimi === "prano" ? "Po ruhet pranimi…"
+      : veprimi === "refuzo" ? "Po ruhet refuzimi…" : "Po dërgohet kërkesa…");
     try {
       const res = await fetch(`/api/gjendja/${id}`, {
         method: "POST",
@@ -52,6 +53,7 @@ export default function GjendjaLive({ id }: { id: string }) {
       const { rezultati } = await res.json();
       // Suksesi shfaqet vetem pas konfirmimit te serverit.
       if (rezultati === "pranuar") setMesazhi("Pranimi u ruajt");
+      else if (rezultati === "refuzuar") setMesazhi("Refuzimi u ruajt");
       else if (rezultati === "derguar") setMesazhi(""); // statusi poshte e tregon vete
       else if (rezultati === "hyr") setMesazhi("Hyr në llogari për ta bërë këtë veprim.");
       else setMesazhi("Asgjë nuk ndryshoi: kërkesa ekziston ose nuk ka vende.");
@@ -85,20 +87,28 @@ export default function GjendjaLive({ id }: { id: string }) {
           </>
         ) : imja.statusi === "ne_pritje" ? (
           <p>Kërkesa u dërgua · <strong>Në pritje</strong></p>
-        ) : (
+        ) : imja.statusi === "pranuar" ? (
           <p><strong>U pranua</strong> · Vendi u konfirmua</p>
+        ) : (
+          <p><strong>U refuzua</strong> · Kërko një udhëtim tjetër</p>
         )
       )}
+      {gjendja.roli === "udhetar" && <p><a href="/njoftimet">Shiko njoftimet</a></p>}
 
       {gjendja.roli === "shofer" && (
         gjendja.kerkesat.length === 0 ? <p>Pa kërkesë</p> : (
           <ul>
             {gjendja.kerkesat.map((k) => (
               <li key={k.id}>
-                {k.emri} · <strong>{k.statusi === "ne_pritje" ? "Në pritje" : "U pranua"}</strong>{" "}
+                {k.emri} · <strong>{k.statusi === "ne_pritje" ? "Në pritje"
+                  : k.statusi === "pranuar" ? "U pranua" : "U refuzua"}</strong>{" "}
                 {k.statusi === "ne_pritje" && (
-                  <button type="button" className="action" disabled={bllokuar || gjendja.vende === 0}
-                    onClick={() => dergo("prano", k.id)}>Prano kërkesën</button>
+                  <>
+                    <button type="button" className="action" disabled={bllokuar || gjendja.vende === 0}
+                      onClick={() => dergo("prano", k.id)}>Prano kërkesën</button>{" "}
+                    <button type="button" className="action" disabled={bllokuar}
+                      onClick={() => dergo("refuzo", k.id)}>Refuzo</button>
+                  </>
                 )}
               </li>
             ))}
